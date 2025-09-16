@@ -1,4 +1,4 @@
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, timezone
 from passlib.context import CryptContext
 import jwt
 import uuid
@@ -25,8 +25,9 @@ def create_access_token(
 ):
     payload = {}
 
+    utc_now = datetime.now(timezone.utc)
     payload["user"] = user_data
-    payload["exp"] = datetime.now() + (
+    payload["exp"] = utc_now + (
         expiry if expiry is not None else timedelta(seconds=ACCESS_TOKEN_EXPIRY)
     )
     payload["jti"] = str(uuid.uuid4())
